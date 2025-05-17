@@ -1,13 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
-
-
-
+import type { Survey } from "../lib/interface";
 
 const Home = () => {
     const intialized = useRef<boolean>(false);
 
-    const [surveys, setSurveys] = useState([]);
+    const [surveys, setSurveys] = useState<Survey[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
