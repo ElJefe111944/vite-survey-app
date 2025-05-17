@@ -1,10 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import type { Survey, SurveyResultsOut } from "../lib/interface";
 import { fetchSurvey, fetchSurveySummary } from "../lib/api";
 
+import { 
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    Tooltip,
+    ResponsiveContainer,
+    CartesianGrid
+} from "recharts";
+
 const SurveySummary = () => {
     const { id } = useParams();
+
+    const initialized = useRef<boolean>(false);
 
     const [survey, setSurvey] = useState<Survey | null>(null);
     const [surveyResults, setSurveyResults] = useState<SurveyResultsOut[]>([]);
@@ -14,7 +26,8 @@ const SurveySummary = () => {
     useEffect(() => {
         const loadSummary = async () => {
 
-            if (!id) return;
+            if (!id || initialized.current) return;
+            initialized.current = true;
 
             try {
                 const surveyData = await fetchSurvey(id);
@@ -41,7 +54,37 @@ const SurveySummary = () => {
     if (!survey || !surveyResults) return <p>{"Survey Results not found"}</p>
 
     return (
-        <div>Survey Summary</div>
+        <div>
+            <div>
+                <h1>{survey.title} - Summary</h1>
+            </div>
+            <div>
+                {survey.questions.map((question, idx) => {
+                    const result = surveyResults[idx];
+
+                    const data = question.options?.map((opt) => ({
+                        option: opt,
+                        votes: result.option_totals[opt] || 0
+                    })) ?? [];
+
+                    return (
+                        <div key={question.id}>
+                            <h2>{question.question}</h2>
+                            <p>Total responses: {result?.total_votes}</p>
+
+                            <ResponsiveContainer width="100%" height={200}>
+                                <BarChart data={data}>
+                                <XAxis dataKey="option" />
+                                <YAxis allowDecimals={false} />
+                                <Tooltip />
+                                <Bar dataKey="votes" fill="#3b82f6" radius={[4,4,4,0]} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
     )
 };
 
