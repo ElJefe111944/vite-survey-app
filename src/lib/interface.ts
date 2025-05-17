@@ -11,3 +11,8 @@ export interface SurveyQuestion {
     question: string;
     options: string[] | null;
 };
+
+export interface SurveyResponseItem {
+    question_id: string;
+    selected_option: string;
+}
