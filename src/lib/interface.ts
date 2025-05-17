@@ -16,3 +16,13 @@ export interface SurveyResponseItem {
     question_id: string;
     selected_option: string;
 }
+
+export interface SaveResponseAck {
+    status: string;
+    id: number;
+};
+
+export interface SurveyResponsesOut {
+    responses: SurveyResponseItem[];
+}
+
