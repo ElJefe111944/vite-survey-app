@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { fetchSurvey } from "../lib/api";
-import type { Survey } from "../lib/interface";
+import type { Survey, SurveyResponseItem } from "../lib/interface";
 
 const Survey = () => {
     const { id } = useParams();
@@ -9,6 +9,7 @@ const Survey = () => {
     const intialized = useRef<boolean>(false);
 
     const [survey, setSurvey] = useState<Survey | null>(null);
+    const [responses, setResponses] = useState<SurveyResponseItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -32,6 +33,15 @@ const Survey = () => {
 
         loadSurvey();
     }, [id]);
+
+    const handleChange = (questionId: string, selected: string | string[]) => {
+        setResponses((prev) => {
+            const filtered = prev.filter((response) => response.question_id !== questionId);
+            return [...filtered, { question_id: questionId, selected_option: selected.toString() }];
+        })
+    };
+
+
 
     if (isLoading) return <p>Loading survey...</p>
     if (error || !survey) return <p>{error || "Survey not found"}</p>
@@ -57,7 +67,7 @@ const Survey = () => {
                                             type="radio"
                                             name={item.id}
                                             value={option}
-                                            onChange={() => { }}
+                                            onChange={() => handleChange(item.id, option)}
                                             required
                                         />
                                         {option}
@@ -70,7 +80,12 @@ const Survey = () => {
                                             type="checkbox"
                                             name={`${item.id}-${option}`}
                                             value={option}
-                                            onChange={() => { }}
+                                            onChange={(e) => {
+                                               const selected = responses.find((response) => response.question_id === item.id)?.selected_option.split(",") || [];
+                                               const updated = e.target.checked ? [...selected, option]
+                                                : selected.filter((option) => option !== option);
+                                                handleChange(item.id, updated)
+                                            }}
                                             required
                                         />
                                         {option}
