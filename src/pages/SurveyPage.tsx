@@ -6,7 +6,7 @@ import type { Survey, SurveyResponseItem } from "../lib/interface";
 const SurveyPage = () => {
     const { id } = useParams();
 
-    const intialized = useRef<boolean>(false);
+    const initialized = useRef<boolean>(false);
     const navigate = useNavigate();
 
     const [survey, setSurvey] = useState<Survey | null>(null);
@@ -18,8 +18,8 @@ const SurveyPage = () => {
 
         const loadSurvey = async () => {
 
-            if (!id || intialized.current) return;
-            intialized.current = true;
+            if (!id || initialized.current) return;
+            initialized.current = true;
 
             try {
                 const data = await fetchSurvey(id);

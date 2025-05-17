@@ -4,7 +4,7 @@ import type { Survey } from "../lib/interface";
 import SurveyCard from "../components/SurveyCard";
 
 const Home = () => {
-    const intialized = useRef<boolean>(false);
+    const initialized = useRef<boolean>(false);
 
     const [surveys, setSurveys] = useState<Survey[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -13,8 +13,8 @@ const Home = () => {
     useEffect(() => {
         const loadSurveys = async () => {
 
-            if (intialized.current) return;
-            intialized.current = true;
+            if (initialized.current) return;
+            initialized.current = true;
 
             try {
                 const data = await fetchSurveys();
