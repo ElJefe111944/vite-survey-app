@@ -26,3 +26,9 @@ export interface SurveyResponsesOut {
     responses: SurveyResponseItem[];
 }
 
+export interface SurveyResultsOut {
+    question_id: string;
+    total_votes: number;
+    option_totals: Record<string, number>;
+    percentages: Record<string, number>; 
+};
