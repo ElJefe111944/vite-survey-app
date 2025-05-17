@@ -9,3 +9,8 @@ const api = axios.create({
         Authorization: API_KEY,
     }
 });
+
+export async function fetchSurveys(){
+    const res = await api.get("/surveys");
+    return res.data;
+};
