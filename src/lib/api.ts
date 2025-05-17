@@ -29,7 +29,9 @@ export async function submitSurvey(
     return res.data;
 };
 
-export async function fetchSurveySummary(id: string): Promise<SurveyResultsOut[]>{
-    const res = await api.get(`/surveys/${id}/responses`);
+export async function fetchSurveySummary(id: string, questionId: string): Promise<SurveyResultsOut>{
+    const res = await api.get(`/surveys/${id}/responses`, {
+        params: { question_id: questionId }
+    });
     return res.data;
 };
