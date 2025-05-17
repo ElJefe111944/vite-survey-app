@@ -29,7 +29,7 @@ export async function submitSurvey(
     return res.data;
 };
 
-export async function fetchSurveySummary(id: string): Promise<SurveyResultsOut>{
+export async function fetchSurveySummary(id: string): Promise<SurveyResultsOut[]>{
     const res = await api.get(`/surveys/${id}/responses`);
     return res.data;
 };
