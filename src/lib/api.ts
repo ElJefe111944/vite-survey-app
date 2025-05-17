@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Survey, SaveResponseAck, SurveyResponsesOut } from "./interface";
+import type { Survey, SaveResponseAck, SurveyResponsesOut, SurveyResultsOut } from "./interface";
 
 const API_BASE = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
@@ -26,5 +26,10 @@ export async function submitSurvey(
     payload: SurveyResponsesOut
 ): Promise<SaveResponseAck> {
     const res = await api.post(`/surveys/${id}/responses`, payload);
+    return res.data;
+};
+
+export async function fetchSurveySummary(id: string): Promise<SurveyResultsOut>{
+    const res = await api.get(`/surveys/${id}/responses`);
     return res.data;
 };
