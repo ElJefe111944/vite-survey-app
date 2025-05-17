@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
+import { HashLoader } from "react-spinners";
 import type { Survey } from "../lib/interface";
 import SurveyCard from "../components/SurveyCard";
 
@@ -37,7 +38,7 @@ const Home = () => {
             </div>
             <div>
                 {isLoading ? (
-                    <p>Loading..</p>
+                    <HashLoader color="black" />
                 ) : (
                     <div>
                         {surveys.map((item) => (
