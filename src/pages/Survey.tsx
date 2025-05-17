@@ -16,7 +16,7 @@ const Survey = () => {
 
         const loadSurvey = async () => {
 
-            if(!id || intialized.current) return;
+            if (!id || intialized.current) return;
             intialized.current = true;
 
             try {
@@ -38,8 +38,54 @@ const Survey = () => {
 
     return (
         <div>
-            <p>{survey.title}</p>
-            <p>{survey.description}</p>
+            <div>
+                <div>
+                    <p>{survey.title}</p>
+                    <p>{survey.description}</p>
+                </div>
+                <div>
+                    <form onSubmit={(e) => {
+                        e.preventDefault();
+                    }}>
+                        {survey.questions.map((item) => (
+                            <div key={item.id}>
+                                <label>{item.question}</label>
+                                {/* single choice */}
+                                {item.type === "single_choice" && item.options?.map((option) => (
+                                    <div key={option}>
+                                        <input
+                                            type="radio"
+                                            name={item.id}
+                                            value={option}
+                                            onChange={() => { }}
+                                            required
+                                        />
+                                        {option}
+                                    </div>
+                                ))}
+                                {/* multiple choice */}
+                                {item.type === "multiple_choice" && item.options?.map((option) => (
+                                    <div key={option}>
+                                        <input
+                                            type="checkbox"
+                                            name={`${item.id}-${option}`}
+                                            value={option}
+                                            onChange={() => { }}
+                                            required
+                                        />
+                                        {option}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                        <div>
+                            <button type="submit">
+                                Submit Survey
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     )
 };
