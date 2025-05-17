@@ -1,11 +1,11 @@
-export type Survey = {
+export interface Survey {
     id: string;
     title: string;
     description: string;
     questions: SurveyQuestion[];
 };
 
-export type SurveyQuestion = {
+export interface SurveyQuestion {
     id: string;
     type: string;
     question: string;
