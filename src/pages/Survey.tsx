@@ -1,10 +1,12 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetchSurvey } from "../lib/api";
 import type { Survey } from "../lib/interface";
 
 const Survey = () => {
     const { id } = useParams();
+
+    const intialized = useRef<boolean>(false);
 
     const [survey, setSurvey] = useState<Survey | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -14,7 +16,8 @@ const Survey = () => {
 
         const loadSurvey = async () => {
 
-            if(!id) return;
+            if(!id || intialized.current) return;
+            intialized.current = true;
 
             try {
                 const data = await fetchSurvey(id);
