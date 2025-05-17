@@ -1,12 +1,13 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import { fetchSurvey } from "../lib/api";
+import { fetchSurvey, submitSurvey } from "../lib/api";
 import type { Survey, SurveyResponseItem } from "../lib/interface";
 
 const Survey = () => {
     const { id } = useParams();
 
     const intialized = useRef<boolean>(false);
+    const navigate = useNavigate();
 
     const [survey, setSurvey] = useState<Survey | null>(null);
     const [responses, setResponses] = useState<SurveyResponseItem[]>([]);
@@ -41,7 +42,16 @@ const Survey = () => {
         })
     };
 
+    const handleSubmit = async () => {
 
+        if (!id) return;
+        try {
+            await submitSurvey(id, { responses });
+            navigate(`/survey/${id}/summary`);
+        } catch (error) {
+            console.error(error, "error submitting survey");
+        } 
+    };
 
     if (isLoading) return <p>Loading survey...</p>
     if (error || !survey) return <p>{error || "Survey not found"}</p>
@@ -56,6 +66,7 @@ const Survey = () => {
                 <div>
                     <form onSubmit={(e) => {
                         e.preventDefault();
+                        handleSubmit();
                     }}>
                         {survey.questions.map((item) => (
                             <div key={item.id}>
@@ -81,12 +92,11 @@ const Survey = () => {
                                             name={`${item.id}-${option}`}
                                             value={option}
                                             onChange={(e) => {
-                                               const selected = responses.find((response) => response.question_id === item.id)?.selected_option.split(",") || [];
-                                               const updated = e.target.checked ? [...selected, option]
-                                                : selected.filter((option) => option !== option);
+                                                const selected = responses.find((response) => response.question_id === item.id)?.selected_option.split(",") || [];
+                                                const updated = e.target.checked ? [...selected, option]
+                                                    : selected.filter((option) => option !== option);
                                                 handleChange(item.id, updated)
                                             }}
-                                            required
                                         />
                                         {option}
                                     </div>
