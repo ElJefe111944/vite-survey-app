@@ -32,7 +32,9 @@ const Home = () => {
 
     return (
         <div>
-            <h1 className="text-center">Surveys</h1>
+            <div>
+                <h1 className="text-center">Surveys</h1>
+            </div>
             <div>
                 {isLoading ? (
                     <p>Loading..</p>

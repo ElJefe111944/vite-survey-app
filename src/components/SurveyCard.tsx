@@ -6,8 +6,7 @@ const SurveyCard = ({ id, title, description }: Survey) => {
 
     return (
         <Link to={`/survey/${id}`}>
-            <div>
-                <p>{id}</p>
+            <div className="text-center">
                 <p>{title}</p>
                 <p>{description}</p>
             </div>
