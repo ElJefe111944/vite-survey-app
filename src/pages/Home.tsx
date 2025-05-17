@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
 
 const Home = () => {
+    const intialized = useRef<boolean>(false);
 
     const [surveys, setSurveys] = useState([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -9,7 +10,10 @@ const Home = () => {
 
     useEffect(() => {
         const loadSurveys = async () => {
-            console.log("Loading surveys")
+
+            if (intialized.current) return;
+            intialized.current = true;
+
             try {
                 const data = await fetchSurveys();
                 setSurveys(data);
