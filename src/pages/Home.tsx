@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
 import type { Survey } from "../lib/interface";
+import SurveyCard from "../components/SurveyCard";
 
 const Home = () => {
     const intialized = useRef<boolean>(false);
@@ -30,7 +31,20 @@ const Home = () => {
     }, []);
 
     return (
-        <h1 className="text-center">HomePage</h1>
+        <div>
+            <h1 className="text-center">HomePage</h1>
+            <div>
+                {isLoading ? (
+                    <p>Loading..</p>
+                ) : (
+                    <div>
+                        {surveys.map((item) => (
+                            <SurveyCard key={item.id} {...item} />
+                        ))}
+                    </div>
+                )}
+            </div>
+        </div>
     )
 };
 
