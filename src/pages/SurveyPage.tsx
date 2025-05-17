@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import { fetchSurvey, submitSurvey } from "../lib/api";
 import type { Survey, SurveyResponseItem } from "../lib/interface";
 
-const Survey = () => {
+const SurveyPage = () => {
     const { id } = useParams();
 
     const intialized = useRef<boolean>(false);
@@ -115,4 +115,4 @@ const Survey = () => {
     )
 };
 
-export default Survey;
+export default SurveyPage;
