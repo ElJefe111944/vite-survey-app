@@ -25,6 +25,6 @@ export async function submitSurvey(
     id: string,
     payload: SurveyResponsesOut
 ): Promise<SaveResponseAck> {
-    const res = await api.post(`/surveys/${id}/response`, payload);
+    const res = await api.post(`/surveys/${id}/responses`, payload);
     return res.data;
 };
