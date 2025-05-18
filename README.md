@@ -32,9 +32,9 @@ A modern, responsive survey application built with **Vite + React + TypeScript**
 ---
 
 ### Images
-[Homepage](./src/assets/homepage.png);
-[Survey](./src/assets/survey.png);
-[Summary](./src/assets/summary.png);
+[](./src/assets/homepage.png);
+[](./src/assets/survey.png);
+[](./src/assets/summary.png);
 
 ## 🔌 API Overview
 
