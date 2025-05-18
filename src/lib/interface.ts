@@ -32,3 +32,13 @@ export interface SurveyResultsOut {
     option_totals: Record<string, number>;
     percentages: Record<string, number>; 
 };
+
+export interface ValidationError {
+    loc: (string | number)[];
+    msg: string;
+    type: string;
+};
+
+export interface HTTPValidationError {
+    detail: ValidationError[];
+};
