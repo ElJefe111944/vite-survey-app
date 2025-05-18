@@ -6,6 +6,7 @@ import { fetchSurvey, fetchSurveySummary } from "../lib/api";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
+import Header from "../components/Header";
 
 import {
     BarChart,
@@ -65,9 +66,7 @@ const SurveySummary = () => {
     
     return (
         <div>
-            <div>
-                <h1 className="text-center">Surveys</h1> <CgMenuGridO />
-            </div>
+            <Header />
 
             {isLoading && <LoadingSpinner />}
 

@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
 import type { Survey } from "../lib/interface";
-import { CgMenuGridO } from "react-icons/cg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SurveyCard from "../components/SurveyCard";
 import ErrorMessage from "../components/ErrorMessage";
+import Header from "../components/Header";
 
 const Home = () => {
     const initialized = useRef<boolean>(false);
@@ -45,9 +45,7 @@ const Home = () => {
 
     return (
         <div>
-            <div>
-                <h1 className="text-center">Surveys</h1> <CgMenuGridO />
-            </div>
+            <Header />
             <div>
                 {isLoading && <LoadingSpinner />}
 
