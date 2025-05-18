@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { fetchSurvey, submitSurvey } from "../lib/api";
 import type { Survey, SurveyResponseItem } from "../lib/interface";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const SurveyPage = () => {
     const { id } = useParams();
@@ -53,7 +54,7 @@ const SurveyPage = () => {
         } 
     };
 
-    if (isLoading) return <p>Loading survey...</p>
+    if (isLoading) return <LoadingSpinner />;
     if (error || !survey) return <p>{error || "Survey not found"}</p>
 
     return (

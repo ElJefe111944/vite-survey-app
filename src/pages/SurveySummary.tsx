@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import type { Survey, SurveyResultsOut } from "../lib/interface";
 import { fetchSurvey, fetchSurveySummary } from "../lib/api";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 import { 
     BarChart,
@@ -49,7 +50,7 @@ const SurveySummary = () => {
         loadSummary();
     }, [id]);
 
-    if (isLoading) return <p>Loading survey...</p>
+    if (isLoading) return <LoadingSpinner />;
     if (error) return <p>{error || "Error fetching results"}</p>
     if (!survey || !surveyResults) return <p>{"Survey Results not found"}</p>
 
