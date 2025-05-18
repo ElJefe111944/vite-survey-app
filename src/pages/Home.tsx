@@ -46,7 +46,7 @@ const Home = () => {
     return (
         <div>
             <Header />
-            <div>
+            <div className="flex items-baseline bg-gray-100 w-full min-h-screen">
                 {isLoading && <LoadingSpinner />}
 
                 {error && (
@@ -54,7 +54,7 @@ const Home = () => {
                 )}
 
                 {!isLoading && !error && (
-                    <div>
+                    <div className="mx-auto grid sm:grid-cols-1 md:grid-cols-2 p-6 gap-5 px-4">
                         {surveys.map((item) => (
                             <SurveyCard key={item.id} {...item} />
                         ))}
