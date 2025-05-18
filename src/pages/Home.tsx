@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
-import { HashLoader } from "react-spinners";
 import type { Survey } from "../lib/interface";
+import { CgMenuGridO } from "react-icons/cg";
+import LoadingSpinner from "../components/LoadingSpinner";
 import SurveyCard from "../components/SurveyCard";
 
 const Home = () => {
@@ -34,11 +35,11 @@ const Home = () => {
     return (
         <div>
             <div>
-                <h1 className="text-center">Surveys</h1>
+                <h1 className="text-center">Surveys</h1> <CgMenuGridO />
             </div>
             <div>
                 {isLoading ? (
-                    <HashLoader color="black" />
+                    <LoadingSpinner />
                 ) : (
                     <div>
                         {surveys.map((item) => (
