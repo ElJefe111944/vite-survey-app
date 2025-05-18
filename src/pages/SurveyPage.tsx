@@ -5,6 +5,7 @@ import type { Survey, SurveyResponseItem } from "../lib/interface";
 import { CgMenuGridO } from "react-icons/cg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 
 const SurveyPage = () => {
     const { id } = useParams();
@@ -104,9 +105,7 @@ const SurveyPage = () => {
                 {isLoading && <LoadingSpinner />}
 
                 {error && (
-                    <div className="h-full w-full flex absolute justify-center items-center">
-                        <p>{error}</p>
-                    </div>
+                    <ErrorMessage error={error} />
                 )}
                 {survey && (
                     <div>

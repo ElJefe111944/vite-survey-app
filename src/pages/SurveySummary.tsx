@@ -5,6 +5,7 @@ import { CgMenuGridO } from "react-icons/cg";
 import { fetchSurvey, fetchSurveySummary } from "../lib/api";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
 
 import {
     BarChart,
@@ -71,9 +72,7 @@ const SurveySummary = () => {
             {isLoading && <LoadingSpinner />}
 
             {error && (
-                <div className="h-full w-full flex absolute justify-center items-center">
-                    <p>{error}</p>
-                </div>
+                <ErrorMessage error={error} />
             )}
 
             {!isLoading && !error && (

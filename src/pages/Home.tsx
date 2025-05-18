@@ -5,6 +5,7 @@ import { CgMenuGridO } from "react-icons/cg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SurveyCard from "../components/SurveyCard";
+import ErrorMessage from "../components/ErrorMessage";
 
 const Home = () => {
     const initialized = useRef<boolean>(false);
@@ -51,9 +52,7 @@ const Home = () => {
                 {isLoading && <LoadingSpinner />}
 
                 {error && (
-                    <div className="h-full w-full flex absolute justify-center items-center">
-                        <p>{error}</p>
-                    </div>
+                    <ErrorMessage error={error} />
                 )}
 
                 {!isLoading && !error && (
