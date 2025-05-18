@@ -107,11 +107,11 @@ const SurveyPage = () => {
                     <ErrorMessage error={error} />
                 )}
                 {survey && (
-                    <motion.div  
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.3 }} 
-                    className="md:py-5 md:px-6 p-3 border-gray-300 border-[1px] rounded-2xl bg-white shadow-md w-full md:w-[60%]">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: 0.3 }}
+                        className="md:py-5 md:px-6 p-3 border-gray-300 border-[1px] rounded-2xl bg-white shadow-md w-full md:w-[60%]">
                         <div className="mx-4 shadow-[0_2px_3px_-2px_rgba(0,0,0,0.1)] pb-3">
                             <p className="font-bold text-center mb-1">{survey.title}</p>
                             <p className="text-sm md:text-base text-center">{survey.description}</p>
