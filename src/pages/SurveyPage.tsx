@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { fetchSurvey, submitSurvey } from "../lib/api";
 import type { Survey, SurveyResponseItem } from "../lib/interface";
+import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const SurveyPage = () => {
@@ -75,9 +76,12 @@ const SurveyPage = () => {
 
         try {
             await submitSurvey(id, { responses });
+            toast.success("Your survey was submitted.");
             navigate(`/survey/${id}/summary`);
         } catch (error) {
             console.error(error, "error submitting survey");
+            toast.error("Something went wrong. Please try again.");
+
         }
     };
 
