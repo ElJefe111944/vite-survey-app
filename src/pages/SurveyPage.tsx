@@ -14,6 +14,7 @@ const SurveyPage = () => {
     const [responses, setResponses] = useState<SurveyResponseItem[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
 
     useEffect(() => {
 
@@ -41,17 +42,43 @@ const SurveyPage = () => {
             const filtered = prev.filter((response) => response.question_id !== questionId);
             return [...filtered, { question_id: questionId, selected_option: selected.toString() }];
         })
+
+        if (validationErrors[questionId]) {
+            setValidationErrors((prev) => {
+                const updated = { ...prev };
+                delete updated[questionId];
+                return updated;
+            })
+        };
     };
 
     const handleSubmit = async () => {
 
-        if (!id) return;
+        if (!id || !survey) return;
+
+        const errors: Record<string, string> = {};
+
+        // check at least one multiple choice option is selected
+        survey.questions.forEach((question) => {
+            const response = responses.find((response) => response.question_id === question.id);
+            const isEmpty = !response || !response.selected_option || response.selected_option.trim() === "";
+
+            if (question.type === "multiple_choice" && isEmpty || question.type === "single_choice" && isEmpty) {
+                errors[question.id] = "Please select at least one option."
+            }
+        });
+
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            return;
+        }
+
         try {
             await submitSurvey(id, { responses });
             navigate(`/survey/${id}/summary`);
         } catch (error) {
             console.error(error, "error submitting survey");
-        } 
+        }
     };
 
     if (isLoading) return <LoadingSpinner />;
@@ -72,6 +99,11 @@ const SurveyPage = () => {
                         {survey.questions.map((item) => (
                             <div key={item.id}>
                                 <label>{item.question}</label>
+                                {item.type === "multiple_choice" || item.type === "single_choice" && validationErrors[item.id] && (
+                                    <p className="text-red-500">
+                                        {validationErrors[item.id]}
+                                    </p>
+                                )}
                                 {/* single choice */}
                                 {item.type === "single_choice" && item.options?.map((option) => (
                                     <div key={option}>
@@ -80,7 +112,6 @@ const SurveyPage = () => {
                                             name={item.id}
                                             value={option}
                                             onChange={() => handleChange(item.id, option)}
-                                            required
                                         />
                                         {option}
                                     </div>
@@ -95,7 +126,7 @@ const SurveyPage = () => {
                                             onChange={(e) => {
                                                 const selected = responses.find((response) => response.question_id === item.id)?.selected_option.split(",") || [];
                                                 const updated = e.target.checked ? [...selected, option]
-                                                    : selected.filter((option) => option !== option);
+                                                    : selected.filter((opt) => opt !== option);
                                                 handleChange(item.id, updated)
                                             }}
                                         />
