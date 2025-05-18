@@ -1,4 +1,5 @@
 import axios from "axios";
+import { handleApiError } from "./errors";
 import type { Survey, SaveResponseAck, SurveyResponsesOut, SurveyResultsOut } from "./interface";
 
 const API_BASE = import.meta.env.VITE_API_URL;
@@ -10,6 +11,14 @@ const api = axios.create({
         Authorization: API_KEY,
     }
 });
+
+// Intercept errors globally
+api.interceptors.response.use(
+    (response) => response,
+    (error) => Promise.reject(handleApiError(error))
+);
+
+// API Functions
 
 export async function fetchSurveys(): Promise<Survey[]> {
     const res = await api.get("/surveys");
