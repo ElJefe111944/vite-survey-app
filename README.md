@@ -1,54 +1,78 @@
-# React + TypeScript + Vite
+# Survey Grid – Lightweight Survey Tool
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive survey application built with **Vite + React + TypeScript**. It allows users to browse surveys, take a survey, submit responses, and view aggregated results with a clean, mobile-friendly UI and a real API backend.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- View a list of available surveys
+- Take surveys with single and multiple choice questions
+- Submit responses to an API endpoint
+- View survey summaries with charts (Recharts)
+- Mobile responsive, animated UI
+- Error handling and loading states
+- Token-based authorisation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🧩 Tech Stack
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+| Tool             | Purpose                                 |
+|------------------|------------------------------------------|
+| **Vite**         | Frontend tooling and dev server          |
+| **React**        | UI library                               |
+| **TypeScript**   | Static typing                            |
+| **Tailwind CSS** | Styling and responsive layout            |
+| **Recharts**     | Charting library (Bar and Line graphs)   |
+| **React Router** | Page routing                             |
+| **Axios**        | API calls and interceptors               |
+| **react-hot-toast** | Toast messages for feedback         |
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+### Images
+[Homepage](./src/assets/homepage.png);
+[Survey](./src/assets/survey.png);
+[Summary](./src/assets/summary.png);
+
+## 🔌 API Overview
+
+> Authorization is done via a `Bearer` token set in the headers after an `authorize` call.
+
+### 1. `POST /authorize`
+- **Purpose**: Authenticates using an API key
+- **Headers**: `Authorization: API_KEY`
+- **Response**: `{ token: string }`
+
+### 2. `GET /surveys`
+- **Purpose**: Fetch all available surveys
+- **Headers**: `Authorization: Bearer TOKEN`
+
+### 3. `GET /surveys/:id`
+- **Purpose**: Get specific survey details (questions)
+
+### 4. `POST /surveys/:id/submit`
+- **Purpose**: Submit survey responses
+- **Body Example**:
+
+### 5. `GET /surveys/:id/responses?question_id=...`
+
+Fetch aggregate results for a specific question in a survey.
+
+
+## 🛡 Error Handling
+
+All API requests are wrapped in a centralized error handler using Axios interceptors (`lib/errors.ts`).
+
+- Handles common errors like:
+  - `401 Unauthorized` – prompts re-authentication
+  - `404 Not Found` – displays a "Not Found" message
+  - Network errors – shows a connection failure toast
+
+- Uses `react-hot-toast` to give users visual feedback:
+  - ✅ `toast.success("Submitted successfully")`
+  - ❌ `toast.error("Something went wrong")`
+
+- Field-level validation (e.g., unanswered multiple choice questions) is handled with inline messages beside inputs.
+
