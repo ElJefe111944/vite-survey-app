@@ -77,3 +77,9 @@ All API requests are wrapped in a centralized error handler using Axios intercep
 
 - Field-level validation (e.g., unanswered multiple choice questions) is handled with inline messages beside inputs.
 
+---
+
+## 🌐 Live Project
+
+You can view the deployed app here:  
+👉 **[https://vite-survey-app.vercel.app](https://vite-survey-app.vercel.app)**
