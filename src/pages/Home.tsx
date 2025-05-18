@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { fetchSurveys } from "../lib/api";
 import type { Survey } from "../lib/interface";
 import { CgMenuGridO } from "react-icons/cg";
+import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 import SurveyCard from "../components/SurveyCard";
 
@@ -22,8 +23,17 @@ const Home = () => {
                 const data = await fetchSurveys();
                 setSurveys(data);
             } catch (error) {
-                setError("Failed to load surveys");
-                console.error("Failed to load surveys: ", error);
+                let message = "Failed to load surveys";
+                if (error instanceof Error) {
+                    if (error.message.includes("404")) {
+                        message = "No surveys were found.";
+                    } else {
+                        message = error.message;
+                    }
+                }
+                setError(message);
+                toast.error(message);
+                console.error("Survey load error:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -38,9 +48,15 @@ const Home = () => {
                 <h1 className="text-center">Surveys</h1> <CgMenuGridO />
             </div>
             <div>
-                {isLoading ? (
-                    <LoadingSpinner />
-                ) : (
+                {isLoading && <LoadingSpinner />}
+
+                {error && (
+                    <div className="h-full w-full flex absolute justify-center items-center">
+                        <p>{error}</p>
+                    </div>
+                )}
+
+                {!isLoading && !error && (
                     <div>
                         {surveys.map((item) => (
                             <SurveyCard key={item.id} {...item} />

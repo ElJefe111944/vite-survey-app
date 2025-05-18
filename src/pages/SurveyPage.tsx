@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import { fetchSurvey, submitSurvey } from "../lib/api";
 import type { Survey, SurveyResponseItem } from "../lib/interface";
+import { CgMenuGridO } from "react-icons/cg";
 import toast from "react-hot-toast";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -28,8 +29,17 @@ const SurveyPage = () => {
                 const data = await fetchSurvey(id);
                 setSurvey(data);
             } catch (error) {
-                setError("Failed to load surveys");
-                console.error("Failed to load surveys: ", error);
+                let message = "Failed to load survey";
+                if (error instanceof Error) {
+                    if (error.message.includes("404")) {
+                        message = "No survey was found.";
+                    } else {
+                        message = error.message;
+                    }
+                }
+                setError(message);
+                toast.error(message);
+                console.error("Survey load error:", error);
             } finally {
                 setIsLoading(false);
             };
@@ -85,67 +95,78 @@ const SurveyPage = () => {
         }
     };
 
-    if (isLoading) return <LoadingSpinner />;
-    if (error || !survey) return <p>{error || "Survey not found"}</p>
-
     return (
         <div>
             <div>
-                <div>
-                    <p>{survey.title}</p>
-                    <p>{survey.description}</p>
-                </div>
-                <div>
-                    <form onSubmit={(e) => {
-                        e.preventDefault();
-                        handleSubmit();
-                    }}>
-                        {survey.questions.map((item) => (
-                            <div key={item.id}>
-                                <label>{item.question}</label>
-                                {item.type === "multiple_choice" || item.type === "single_choice" && validationErrors[item.id] && (
-                                    <p className="text-red-500">
-                                        {validationErrors[item.id]}
-                                    </p>
-                                )}
-                                {/* single choice */}
-                                {item.type === "single_choice" && item.options?.map((option) => (
-                                    <div key={option}>
-                                        <input
-                                            type="radio"
-                                            name={item.id}
-                                            value={option}
-                                            onChange={() => handleChange(item.id, option)}
-                                        />
-                                        {option}
-                                    </div>
-                                ))}
-                                {/* multiple choice */}
-                                {item.type === "multiple_choice" && item.options?.map((option) => (
-                                    <div key={option}>
-                                        <input
-                                            type="checkbox"
-                                            name={`${item.id}-${option}`}
-                                            value={option}
-                                            onChange={(e) => {
-                                                const selected = responses.find((response) => response.question_id === item.id)?.selected_option.split(",") || [];
-                                                const updated = e.target.checked ? [...selected, option]
-                                                    : selected.filter((opt) => opt !== option);
-                                                handleChange(item.id, updated)
-                                            }}
-                                        />
-                                        {option}
-                                    </div>
-                                ))}
-                            </div>
-                        ))}
+                <h1 className="text-center">Surveys</h1> <CgMenuGridO />
+            </div>
+            <div>
+                {isLoading && <LoadingSpinner />}
+
+                {error && (
+                    <div className="h-full w-full flex absolute justify-center items-center">
+                        <p>{error}</p>
+                    </div>
+                )}
+                {survey && (
+                    <div>
                         <div>
-                            <button type="submit">
-                                Submit Survey
-                            </button>
+                            <p>{survey.title}</p>
+                            <p>{survey.description}</p>
                         </div>
-                    </form>
-                </div>
+                        <div>
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSubmit();
+                            }}>
+                                {survey.questions.map((item) => (
+                                    <div key={item.id}>
+                                        <label>{item.question}</label>
+                                        {item.type === "multiple_choice" || item.type === "single_choice" && validationErrors[item.id] && (
+                                            <p className="text-red-500">
+                                                {validationErrors[item.id]}
+                                            </p>
+                                        )}
+                                        {/* single choice */}
+                                        {item.type === "single_choice" && item.options?.map((option) => (
+                                            <div key={option}>
+                                                <input
+                                                    type="radio"
+                                                    name={item.id}
+                                                    value={option}
+                                                    onChange={() => handleChange(item.id, option)}
+                                                />
+                                                {option}
+                                            </div>
+                                        ))}
+                                        {/* multiple choice */}
+                                        {item.type === "multiple_choice" && item.options?.map((option) => (
+                                            <div key={option}>
+                                                <input
+                                                    type="checkbox"
+                                                    name={`${item.id}-${option}`}
+                                                    value={option}
+                                                    onChange={(e) => {
+                                                        const selected = responses.find((response) => response.question_id === item.id)?.selected_option.split(",") || [];
+                                                        const updated = e.target.checked ? [...selected, option]
+                                                            : selected.filter((opt) => opt !== option);
+                                                        handleChange(item.id, updated)
+                                                    }}
+                                                />
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ))}
+                                <div>
+                                    <button type="submit">
+                                        Submit Survey
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
