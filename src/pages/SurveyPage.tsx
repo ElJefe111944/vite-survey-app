@@ -124,7 +124,12 @@ const SurveyPage = () => {
                                 {survey.questions.map((item) => (
                                     <div className="mx-4 shadow-[0_2px_3px_-2px_rgba(0,0,0,0.1)] pb-3 pt-3" key={item.id}>
                                         <label className="block w-full text-left md:text-center text-sm md:text-base">{item.question}</label>
-                                        {item.type === "multiple_choice" || item.type === "single_choice" && validationErrors[item.id] && (
+                                        {item.type === "multiple_choice" && validationErrors[item.id] && (
+                                            <p className="text-red-500 font-semibold md:text-center">
+                                                {validationErrors[item.id]}
+                                            </p>
+                                        )}
+                                        {item.type === "single_choice" && validationErrors[item.id] && (
                                             <p className="text-red-500 font-semibold md:text-center">
                                                 {validationErrors[item.id]}
                                             </p>
