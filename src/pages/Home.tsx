@@ -67,17 +67,19 @@ const Home = () => {
                                 <SurveyCard key={item.id} {...item} />
                             ))}
                         </div>
-                        <div className="flex gap-1">
-                            {Array.from({ length: Math.ceil(surveys.length / surveysPerPage) }, (_, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setCurrentPage(index + 1)}
-                                    className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-emerald-400 text-white' : 'bg-gray-200'} cursor-pointer`}
-                                >
-                                    {index + 1}
-                                </button>
-                            ))}
-                        </div>
+                        {surveys.length > surveysPerPage && (
+                            <div className="flex gap-1">
+                                {Array.from({ length: Math.ceil(surveys.length / surveysPerPage) }, (_, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => setCurrentPage(index + 1)}
+                                        className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-emerald-400 text-white' : 'bg-gray-200'} cursor-pointer`}
+                                    >
+                                        {index + 1}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 )}
             </div>
