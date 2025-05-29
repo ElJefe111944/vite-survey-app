@@ -68,18 +68,24 @@ const Home = () => {
                             ))}
                         </div>
                         {surveys.length > surveysPerPage && (
-                            <div className="flex gap-1">
-                                {Array.from({ length: Math.ceil(surveys.length / surveysPerPage) }, (_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setCurrentPage(index + 1)}
-                                        className={`px-3 py-1 rounded ${currentPage === index + 1 ? 'bg-emerald-400 text-white' : 'bg-gray-200'} cursor-pointer`}
-                                    >
-                                        {index + 1}
-                                    </button>
-                                ))}
+                            <div className="flex gap-1 mb-3">
+                                {Array.from({ length: Math.ceil(surveys.length / surveysPerPage) }, (_, index) => index + 1)
+                                    .filter(page => (
+                                        page === currentPage || page === currentPage - 1 || page === currentPage + 1
+                                    ))
+                                    .map(page => (
+                                        <button
+                                            key={page}
+                                            onClick={() => setCurrentPage(page)}
+                                            className={`px-3 py-1 rounded ${currentPage === page ? 'bg-emerald-400 text-white' : 'bg-gray-200'} cursor-pointer`}
+                                        >
+                                            {page}
+                                        </button>
+                                    ))
+                                }
                             </div>
                         )}
+
                     </div>
                 )}
             </div>
